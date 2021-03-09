@@ -224,9 +224,10 @@ function exitHandler() {
 process.once("SIGINT", exitHandler)
 process.once("SIGUSR2", exitHandler)
 
+const port = process.env.PORT || config["server-port"]
 
-app.listen(config["server-port"], () => {
+app.listen(port, () => {
     dbConnect.connect().then(() => {
-        console.log("ToDo! server Listening on port " + config["server-port"])
+        console.log(`ToDo! server Listening on port ${port}`)
     })
 })

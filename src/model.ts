@@ -169,7 +169,7 @@ export class ToDoItem {
 
     async exists(ra: string): Promise<boolean> {
         try {
-            return await this.getCollection().count({id: ra}) > 0
+            return await this.getCollection().countDocuments({id: ra}) > 0
         } catch(error) {
             console.error("Failed to fetch a student from the database")
             throw error
