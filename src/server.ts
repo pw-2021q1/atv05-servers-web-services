@@ -4,12 +4,15 @@ import bodyParser from "body-parser"
 import { config } from "../conf/config"
 import * as dbConnect from "./db-connection"
 import cors from "cors"
+import * as path from "path"
 
 const app = e()
 
 app.use(cors())
 
-app.get("/:ra/list", async function (req, res) {
+app.use("/", e.static(path.join(__dirname, "..", "static")))
+
+app.get("/api/:ra/list", async function (req, res) {
     try {
         if (await model.StudentDAO.getInstance().exists(req.params.ra)) {
             res.status(200).json({
@@ -33,7 +36,7 @@ app.get("/:ra/list", async function (req, res) {
 
 })
 
-app.post("/:ra/add", bodyParser.json(), async function (req, res) {
+app.post("/api/:ra/add", bodyParser.json(), async function (req, res) {
     try {
         if (!(await model.StudentDAO.getInstance().exists(req.params.ra))) {
             res.status(401).json({
@@ -82,7 +85,7 @@ app.post("/:ra/add", bodyParser.json(), async function (req, res) {
     }
 })
 
-app.post("/:ra/update", bodyParser.json(), async function (req, res) {
+app.post("/api/:ra/update", bodyParser.json(), async function (req, res) {
     try {
         if (!(await model.StudentDAO.getInstance().exists(req.params.ra))) {
             res.status(401).json({
@@ -134,7 +137,7 @@ app.post("/:ra/update", bodyParser.json(), async function (req, res) {
     }
 })
 
-app.get("/:ra/remove/:id", async (req, res) => {
+app.get("/api/:ra/remove/:id", async (req, res) => {
     try {
         if (!(await model.StudentDAO.getInstance().exists(req.params.ra))) {
             res.status(401).json({
@@ -165,7 +168,7 @@ app.get("/:ra/remove/:id", async (req, res) => {
     }
 })
 
-app.get("/:ra/item/:id", async (req, res) => {
+app.get("/api/:ra/item/:id", async (req, res) => {
     try {
         if (!(await model.StudentDAO.getInstance().exists(req.params.ra))) {
             res.status(401).json({
