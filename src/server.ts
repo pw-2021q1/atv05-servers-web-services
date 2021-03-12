@@ -1,6 +1,5 @@
 import e from "express"
 import * as model from "./model"
-import bodyParser from "body-parser"
 import { config } from "../conf/config"
 import * as dbConnect from "./db-connection"
 import cors from "cors"
@@ -36,7 +35,7 @@ app.get("/api/:ra/list", async function (req, res) {
 
 })
 
-app.post("/api/:ra/add", bodyParser.json(), async function (req, res) {
+app.post("/api/:ra/add", e.json(), async function (req, res) {
     try {
         if (!(await model.StudentDAO.getInstance().exists(req.params.ra))) {
             res.status(401).json({
@@ -85,7 +84,7 @@ app.post("/api/:ra/add", bodyParser.json(), async function (req, res) {
     }
 })
 
-app.post("/api/:ra/update", bodyParser.json(), async function (req, res) {
+app.post("/api/:ra/update", e.json(), async function (req, res) {
     try {
         if (!(await model.StudentDAO.getInstance().exists(req.params.ra))) {
             res.status(401).json({
@@ -107,6 +106,7 @@ app.post("/api/:ra/update", bodyParser.json(), async function (req, res) {
                 toDoItem.deadline = new Date(Date.parse(req.body.deadline))
                     .toUTCString()
             }
+            toDoItem.student = req.params.ra
 
             const status = await model.ToDoItemDAO.getInstance()
                 .update(toDoItem)
@@ -146,7 +146,8 @@ app.get("/api/:ra/remove/:id", async (req, res) => {
             })
         } else {
             const id = parseInt(req.params.id)
-            const status = model.ToDoItemDAO.getInstance().removeById(id)
+            const ra = req.params.ra
+            const status = await model.ToDoItemDAO.getInstance().removeById(id, ra)
 
             if (status) {
                 res.status(200).json({
@@ -177,7 +178,8 @@ app.get("/api/:ra/item/:id", async (req, res) => {
             })
         } else {
             const id = parseInt(req.params.id)
-            const item = await model.ToDoItemDAO.getInstance().findById(id)
+            const ra = req.params.ra
+            const item = await model.ToDoItemDAO.getInstance().findById(id, ra)
 
             res.status(200).json({
                 status: "ok",

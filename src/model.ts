@@ -91,10 +91,10 @@ export class ToDoItem {
       * Find by profile using its id
       * @param id the profile id
       */
-     async findById(id: number) {
+     async findById(id: number, ra: string) {
          try {
              const response = await this.getCollection().findOne(
-                 {id: id}, 
+                 {id: id, student: ra}, 
                  {projection: {_id: 0, student: 0}})
 
              if (response) {
@@ -110,7 +110,7 @@ export class ToDoItem {
      async update(toDoItem: ToDoItem) {
          try {
              const response = await this.getCollection().replaceOne(
-                 {id: toDoItem.id}, toDoItem)
+                 {id: toDoItem.id, student: toDoItem.student}, toDoItem)
 
              return (response) ? response.modifiedCount > 0 : false
          } catch (error) {
@@ -119,9 +119,11 @@ export class ToDoItem {
          }
      }
 
-     async removeById(id: number) {
+     async removeById(id: number, ra: string) {
          try {
-             const response = await this.getCollection().deleteOne({id: id}, {})
+             const response = await this.getCollection().deleteOne(
+                 {id: id, student: ra}, 
+                 {})
              return (response.deletedCount) ? response.deletedCount > 0 : false
          } catch (error) {
              console.log("Failed to remove element")
