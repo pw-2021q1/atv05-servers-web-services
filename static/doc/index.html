@@ -12,13 +12,12 @@
 
 <body class="container mt-3">
 
-    <h1>ToDO! SPA Server API</h1>
+    <h1>ToDO! Web Server/API</h1>
+
     <ul>
-        <li><strong>Atenção:</strong> por restrições da conta free do Heroku, o server da API "dorme" após 30min de
-            inatividade.
-            Consequentemente, pode ser que o seu primeiro acesso demore de 5-10s para completar (aguarde enquanto o servidor
-            inicia),
-            a partir daí os acessos posteriores serão mais rápidos.
+        <li>Todas as URLs consideram que o serviço está instalado na 
+            configuração padrão da nossa Vagrant, ou seja, localhost, porta 3000.
+            Caso sua configuração seja diferente, adapte as URLs no seu cliente.
         </li>
     </ul>
 
@@ -26,12 +25,7 @@
 
     <ul>
         <li>
-            URL-base: <p><code>https://pw2021q1-todo-spa.herokuapp.com/api</code></p>
-        </li>
-        <li>
-            Todas as requisições da API precisam ser acompanhadas do seu RA, por exemplo, para o
-            <code>RA=1234</code>:<br>
-            <code>https://pw2021q1-todo-spa.herokuapp.com/api/1234/</code><br>
+            URL-base: <p><code>http://localhost:3000/api</code></p>
         </li>
     </ul>
 
@@ -45,7 +39,8 @@
                 <li><code>"failure"</code>: caso tenha ocorrio algum erro</li>
             </ul>
         </li>
-        <li> O documento de resposta inclui também a propriedade <code>"message"</code>
+        <li> O documento de resposta, no caso de um erro, 
+            inclui também a propriedade <code>"message"</code> 
             que traz mais detalhes sobre o problema.
         </li>
         <li>Os seguintes códigos de status HTTP podem ser enviados como resposta:
@@ -116,11 +111,11 @@ interface ToDoItem {
         <dt>Descrição</dt>
         <dd>Lista todos os items</dd>
 
-        <dt>Método</dt>
+        <dt>Método HTTP</dt>
         <dd>GET</dd>
 
         <dt>Exemplo</dt>
-        <dd><code>https://pw2021q1-todo-spa.herokuapp.com/api/1234/list</code></dd>
+        <dd><code>http://localhost:3000/list</code></dd>
 
         <dt>Formato da resposta (sucesso)</dt>
         <dd>
@@ -139,11 +134,11 @@ interface ToDoItem {
         <dt>Descrição</dt>
         <dd>Adiciona um item. O <code>id</code> é gerado automaticamente.</dd>
 
-        <dt>Método</dt>
-        <dd>POST</dd>
+        <dt>Método HTTP</dt>
+        <dd>PUT</dd>
 
         <dt>Exemplo</dt>
-        <dd><code>https://pw2021q1-todo-spa.herokuapp.com/api/1234/add</code></dd>
+        <dd><code>http://localhost:3000/add</code></dd>
 
         <dt>Formato do corpo da requisição</dt>
         <dd>
@@ -174,11 +169,11 @@ interface ToDoItem {
         <dt>Descrição</dt>
         <dd>Remove um item com o <code>id</code> informado.</dd>
 
-        <dt>Método</dt>
-        <dd>GET</dd>
+        <dt>Método HTTP</dt>
+        <dd>DELETE</dd>
 
         <dt>Exemplo</dt>
-        <dd><code>https://pw2021q1-todo-spa.herokuapp.com/api/1234/remove/45</code></dd>
+        <dd><code>http://localhost:3000/remove/45</code></dd>
         </dd>
 
         <dt>Formato da resposta</dt>
@@ -200,11 +195,11 @@ interface ToDoItem {
         <dd>Atualiza um item. O <code>id</code> do objeto enviado deve coincidir com o id
             de um dos objetos armazenados.</dd>
 
-        <dt>Método</dt>
-        <dd>POST</dd>
+        <dt>Método HTTP</dt>
+        <dd>PUT</dd>
 
         <dt>Exemplo</dt>
-        <dd><code>https://pw2021q1-todo-spa.herokuapp.com/api/1234/update</code></dd>
+        <dd><code>http://localhost:3000/update</code></dd>
 
         <dt>Formato do corpo da requisição</dt>
         <dd>
@@ -238,11 +233,11 @@ interface ToDoItem {
         <dt>Descrição</dt>
         <dd>Recupera o item com o <code>id</code> informado.</dd>
 
-        <dt>Método</dt>
+        <dt>Método HTTP</dt>
         <dd>GET</dd>
 
         <dt>Exemplo</dt>
-        <dd><code>https://pw2021q1-todo-spa.herokuapp.com/api/1234/item/45</code></dd>
+        <dd><code>http://localhost:3000/item/45</code></dd>
         </dd>
 
         <dt>Formato da resposta</dt>
