@@ -77,7 +77,7 @@ define("Service layer tests", () => {
         it("Operation is defined (should not throw 404)", async () => {
             const response = await doRequest(-1)
 
-            assert.notEqual(response.status, 404, "/add operation does not match REST specification. Check documentation.")
+            assert.notEqual(response.status, 404, "Operation does not match REST specification. Check documentation.")
         })
 
         it("Invalid id should be unsuccessfull", async () => {
@@ -94,7 +94,7 @@ define("Service layer tests", () => {
             for (const item of items) {
                 const response = await doRequest(item.id)
 
-                assert.equal(response.status, 200, `Unexpected response code with valid item id: ${item}`)
+                assert.equal(response.status, 200, `Unexpected response code with valid item id: ${JSON.stringify(item)}`)
                 assert.equal(response.data.status, "ok")
             }
         })
@@ -106,7 +106,12 @@ define("Service layer tests", () => {
                 assert.fail("No element returned. Impossible to test")
             }
             for (const item of items) {
-                validateToDoItem((await doRequest(item.id)).data.item)
+                const retrItem = (await doRequest(item.id)).data.item
+
+                if (!retrItem) {
+                    assert.fail("Retrieved item should not be undefined")
+                }
+                validateToDoItem(retrItem)
             }
         })
 
@@ -132,7 +137,7 @@ define("Service layer tests", () => {
 
         it("Operation is defined (should not throw 404)", async () => {
             const response = await doRequest(null)
-            assert.notEqual(response.status, 404, "/add operation does not match REST specification. Check documentation.")
+            assert.notEqual(response.status, 404, "Operation does not match REST specification. Check documentation.")
         })
 
         it("Should emit 406 status when item has no description", async () => {
@@ -185,7 +190,7 @@ define("Service layer tests", () => {
         it("Operation is defined (should not throw 404)", async () => {
             const response = await doRequest(-1)
 
-            assert.notEqual(response.status, 404, "/add operation does not match REST specification. Check documentation.")
+            assert.notEqual(response.status, 404, "Operation does not match REST specification. Check documentation.")
         })
 
         it("Removing item decrement item count", async () => {
@@ -208,8 +213,8 @@ define("Service layer tests", () => {
 
             const response = await axios.get(ops.item(id))
 
-            assert.equal(response.status, 500)
-            assert.equal(response.data.status, "failure")
+            assert.equal(response.status, 500, "Unexpected response code")
+            assert.equal(response.data.status, "failure", `Expected 'failure' but received something else: ${JSON.stringify(response.data)}`)
         })
     })
 
@@ -222,21 +227,21 @@ define("Service layer tests", () => {
         it("Operation is defined (should not throw 404)", async () => {
             const response = await doRequest({})
 
-            assert.notEqual(response.status, 404, "/add operation does not match REST specification. Check documentation.")
+            assert.notEqual(response.status, 404, "Operation does not match REST specification. Check documentation.")
         })
 
         it("Element with no description cannot be updated", async () => {
             const response = await doRequest({})
 
-            assert.equal(response.status, 406)
-            assert.equal(response.data.status, "failure")
+            assert.equal(response.status, 406, "Unexpected response code")
+            assert.equal(response.data.status, "failure", `Expected 'failure' but received something else: ${JSON.stringify(response.data)}`)
         })
 
         it("Element with invalid id cannot be updated", async () => {
             const response = await doRequest({id: -1, description: "whatever"})
 
-            assert.equal(response.status, 500)
-            assert.equal(response.data.status, "failure")
+            assert.equal(response.status, 500, "Unexpected response code")
+            assert.equal(response.data.status, "failure", `Expected 'failure' but received something else: ${JSON.stringify(response.data)}`)
         })
 
         it("Element with valid id is consistently updated", async () => {
@@ -251,7 +256,7 @@ define("Service layer tests", () => {
 
             const retrItem = (await axios.get(ops.item(item.id))).data.item
 
-            assert.equal(item.isEqual(retrItem), true, `Updated item and retrieved item differ: 
+            assert.equal(retrItem?.isEqual(item), true, `Updated item and retrieved item differ: 
                 Updated: ${JSON.stringify(item)}
                 Retrieved: ${JSON.stringify(retrItem)}`)
         })

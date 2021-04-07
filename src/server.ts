@@ -43,6 +43,7 @@ api.get("/list", async (req, res) => {
             status: "failure",
             message: "Internal error. Database query failed."
         })
+        throw error
     }
 })
 
@@ -68,6 +69,7 @@ api.put("/add", e.json(), async (req, res) => {
                 message: "Internal error. Failed to insert item."
             })
         }
+        throw error
     } 
 })
 
@@ -88,7 +90,7 @@ api.put("/add", e.json(), async (req, res) => {
  */
 app.use(function (err: Error, req: e.Request, res: e.Response,
     next: e.NextFunction) {
-    console.error(err.stack)
+    console.error(err)
     res.status(500).send('Something broke!')
 })
 
