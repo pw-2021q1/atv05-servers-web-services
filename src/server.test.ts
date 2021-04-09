@@ -256,7 +256,7 @@ define("Service layer tests", () => {
 
             const retrItem = (await axios.get(ops.item(item.id))).data.item
 
-            assert.equal(retrItem?.isEqual(item), true, `Updated item and retrieved item differ: 
+            assert.equal(item?.isEqual(retrItem), true, `Updated item and retrieved item differ: 
                 Updated: ${JSON.stringify(item)}
                 Retrieved: ${JSON.stringify(retrItem)}`)
         })
